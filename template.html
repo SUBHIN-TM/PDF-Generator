@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Subhin Tm</h1>
+    <table id="table-container" style="border: 1px solid black;">
+        <tr>
+            <th>no</th>
+            <th>Name</th>
+            <th>Place</th>
+        </tr>
+        <tbody>
+            <tr>
+                <th>1</th>
+                <th>Subhin</th>
+                <th>Calicut</th>
+            </tr>
+            <tr>
+                <th>2</th>
+                <th>Rahul</th>
+                <th>Wyanad</th>
+            </tr>
+        </tbody>
+    </table>
+
+    <button onclick="pdf()">PDF</button>
+    <script>
+        function pdf(params) {
+            alert("")
+            const data=document.getElementById('table-container').outerHTML;
+            console.log(data)
+            sendTableData(data)
+        }
+
+        function sendTableData(data) {
+            fetch('/generate-table',{
+                method:'POST',
+                headers:{'Content-Type' : "application/json"},
+                body:JSON.stringify({data:data})
+            })
+            .then((response) => response.blob())
+            .then((blob) =>{
+                console.log(blob)
+
+                const url= URL.createObjectURL(blob)
+                const a=document.createElement('a')
+                a.href=url
+                a.download="table.pdf"
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+            })
+            
+        }
+    </script>
+</body>
+</html>
